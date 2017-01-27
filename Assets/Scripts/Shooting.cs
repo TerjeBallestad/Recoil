@@ -5,13 +5,13 @@ using UnityEngine;
 public class Shooting : MonoBehaviour {
 
 	public float recoil, bulletSpeed, shootFrequency, reloadTime;
-	public static float bulletCount, clipSize;
+	public float bulletCount, clipSize;
 	float timeToReload;
 	bool reloadTimeFinished, canShoot;
 	public GameObject projectile;
 
 	void Start(){
-		clipSize = 20;
+		clipSize = 15;
 		bulletCount = clipSize;
 		canShoot = true;
 
@@ -23,15 +23,19 @@ public class Shooting : MonoBehaviour {
 			canShoot = false;
 		}
 
-		if (Input.GetMouseButton(0)){
-			if (canShoot) {
-				StartCoroutine ("Shoot");
-			} else {
+		if (Input.GetButtonDown("Fire1")){
+				InvokeRepeating("Shoot",0f,shootFrequency);
+		}
+		if (Input.GetButton("Fire1")){
+			if (bulletCount <= 0) {
 				StartCoroutine ("Reload");
 			}
 		}
 
-		if (Input.GetKeyDown(KeyCode.R)){
+		if (Input.GetButtonUp ("Fire1")) {
+			CancelInvoke ();
+		}
+		if (Input.GetButtonDown("Fire3")){
 			if (bulletCount < clipSize) {
 				StartCoroutine ("Reload");
 			}
@@ -39,14 +43,13 @@ public class Shooting : MonoBehaviour {
 	}
 
 	
-	IEnumerator Shoot (){
-		
-		GameObject instantiatedProjectile = Instantiate (projectile, transform.position, transform.rotation);
-		Rigidbody2D projectileRB = instantiatedProjectile.GetComponent<Rigidbody2D> ();
-		projectileRB.velocity = transform.TransformDirection(new Vector3(bulletSpeed,0,0));
-
-		yield return new WaitForSeconds (shootFrequency);
-		bulletCount--;
+	void Shoot (){
+		if (canShoot) {
+			GameObject instantiatedProjectile = Instantiate (projectile, transform.position, transform.rotation);
+			Rigidbody2D projectileRB = instantiatedProjectile.GetComponent<Rigidbody2D> ();
+			projectileRB.velocity = transform.TransformDirection (new Vector3 (bulletSpeed, 0, 0));
+			bulletCount--;
+		}
 	}
 
 
