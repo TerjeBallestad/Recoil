@@ -1,2 +1,2 @@
-# Reccoil
-This is a readme file for Reccoil
+# Recoil
+This is a readme file for Recoil
