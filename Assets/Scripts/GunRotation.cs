@@ -6,7 +6,8 @@ public class GunRotation : MonoBehaviour {
 
 	Vector3 mousePosition;
 	Vector3 objectPosition;
-	float angle;
+	[HideInInspector]
+	public float angle;
 
 	
 	void Update () {

@@ -11,6 +11,9 @@ public class PlayerMovement : MonoBehaviour {
 	public Transform groundCheck;
 	float groundRadius = 0.1f;
 	public LayerMask whatIsGround;
+	[HideInInspector]
+	public Vector2 recoil = Vector2.zero;
+	public bool shooting = false;
 
 	// Use this for initialization
 	void Start () {
@@ -47,9 +50,9 @@ public class PlayerMovement : MonoBehaviour {
 		HandleMovement (horizontal);
 		// Flips the Player in the direction of movement
 		Flip (horizontal);
-
+		Debug.Log (rigidBody.velocity.y);
 		// If you keep holding the jump button, you will stay in the air a little
-		if (Input.GetButton ("Jump")) {
+		if (Input.GetButton ("Jump") && !shooting) {
 			Jump (jumpForce / 11);
 			jumpForce = jumpForce - 0.05f;
 			if (!grounded) {
@@ -76,11 +79,15 @@ public class PlayerMovement : MonoBehaviour {
 			Vector3 theScale = transform.localScale;
 			theScale.x *= -1;
 			transform.localScale = theScale;
+			float recoilForce = transform.GetChild (0).GetChild (0).GetChild (0).GetComponent<Shooting> ().recoilForce;
+			recoilForce *= -1;
+			transform.GetChild (0).GetChild (0).GetChild (0).GetComponent<Shooting> ().recoilForce = recoilForce;
 		}
 	}
 
 	void Move(float horizontal){
-		rigidBody.velocity = new Vector2 (horizontal * movementSpeed, rigidBody.velocity.y);
+		rigidBody.velocity = new Vector2 (horizontal * movementSpeed + recoil.x, rigidBody.velocity.y + recoil.y);
+		recoil = Vector2.zero;
 	}
 
 	void Jump(float jumpForce){
