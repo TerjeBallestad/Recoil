@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 	Rigidbody2D rigidBody;
 	public float movementSpeed, startJumpForce, jumpForce;
 	public static bool facingRight, canJump;
-	bool grounded;
+	public bool grounded;
 	public Transform groundCheck;
 	float groundRadius = 0.1f;
 	public LayerMask whatIsGround;
@@ -26,17 +26,34 @@ public class PlayerMovement : MonoBehaviour {
 	void Update(){
 
 		// Initial Jump
-		if (Input.GetButtonDown("Jump") && canJump){
-			Jump (startJumpForce);
-			canJump = false;
+//		if (Input.GetButtonDown("Jump") && canJump){
+//			Jump (startJumpForce);
+//			canJump = false;
+//		}
+		if (canJump) {
+			if (Input.GetButtonDown ("Jump")){
+				if (jumpForce == startJumpForce) {
+					Jump (startJumpForce);
+					jumpForce -= 0.05f;
+				}
+			} else if (Input.GetButton ("Jump") && jumpForce < startJumpForce) {
+				Jump (jumpForce / 11);
+				jumpForce -= 0.05f;
+			} 
+
 		}
 
+
 		if (Input.GetButtonUp ("Jump")) {
-			jumpForce = 0;
+			canJump = false;
 		}
 	}
 
 	void FixedUpdate () {
+		if (shooting) {
+			canJump = false;
+		}
+
 		// Check to see if player is on the ground
 		grounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
 
@@ -44,21 +61,17 @@ public class PlayerMovement : MonoBehaviour {
 			jumpForce = startJumpForce;
 			canJump = true;
 		}
+
 		// Get the Input from controller or keyboard for horizontal movement
 		float horizontal = Input.GetAxis ("Horizontal");
+
 		// Takes the horizontal input and makes the player move
 		HandleMovement (horizontal);
+
 		// Flips the Player in the direction of movement
 		Flip (horizontal);
-		Debug.Log (rigidBody.velocity.y);
+
 		// If you keep holding the jump button, you will stay in the air a little
-		if (Input.GetButton ("Jump") && !shooting) {
-			Jump (jumpForce / 11);
-			jumpForce = jumpForce - 0.05f;
-			if (!grounded) {
-				canJump = false;
-			}
-		}
 
 	}
 

@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 101995700}
   - component: {fileID: 101995699}
   - component: {fileID: 101995698}
+  - component: {fileID: 101995703}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -178,6 +179,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &101995703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 101995697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9ec6ea5d16c0421285f6a7321618079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialTarget: {fileID: 2141823941}
 --- !u!1 &474737851
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,16 +313,16 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
+  m_UseAutoMass: 1
+  m_Mass: 1.5174618
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &517046251
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -500,7 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 50
-  shootFrequency: 0.21
+  shotFrequency: 0.2
   reloadTime: 1.4
   bulletCount: 0
   clipSize: 15
@@ -581,7 +594,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: ad2f4cffc1506447da1130985a8ac03e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1079,6 +1092,7 @@ MonoBehaviour:
   movementSpeed: 5
   startJumpForce: 5
   jumpForce: 10
+  grounded: 0
   groundCheck: {fileID: 2047859244}
   whatIsGround:
     serializedVersion: 2

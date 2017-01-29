@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour {
 
-	public float bulletSpeed, shootFrequency, reloadTime, bulletCount, clipSize, recoilForce;
-	float timeToReload;
-	bool reloadTimeFinished, canShoot;
+	public float bulletSpeed, shotFrequency, reloadTime, bulletCount, clipSize, recoilForce;
+	float timeToReload, timeSinceLastShot;
+	bool reloadTimeFinished, canShoot = true;
 	public GameObject projectile;
 	public Vector2 recoil;
 	GunRotation rotationScript;
 	PlayerMovement movementScript;
 
 	void Start(){
-		clipSize = 15;
+		timeSinceLastShot = shotFrequency;
 		bulletCount = clipSize;
-		canShoot = true;
 		rotationScript = transform.parent.parent.GetComponent<GunRotation> ();
 		movementScript = transform.parent.parent.parent.GetComponent<PlayerMovement> ();
 	}
@@ -23,25 +22,30 @@ public class Shooting : MonoBehaviour {
 	void Update(){
 
 		recoil = Quaternion.AngleAxis (rotationScript.angle, Vector3.forward) * Vector3.right;
+
+		timeSinceLastShot += 1 * Time.deltaTime;
+
 	
 		if (bulletCount <= 0) {
 			canShoot = false;
 		}
-
-		if (Input.GetButtonDown("Fire1")){
-			InvokeRepeating ("Shoot", 0f, shootFrequency);
-			movementScript.shooting = true;
-		}
-		if (Input.GetButton("Fire1")){
+			
+		if (Input.GetButton ("Fire1")) {
 			if (bulletCount <= 0) {
 				StartCoroutine ("Reload");
-			}
-		}
+			} else if (shotFrequency <= timeSinceLastShot) {
+				Shoot ();
+				movementScript.shooting = true;
 
-		if (Input.GetButtonUp ("Fire1")) {
-			CancelInvoke ();
+				timeSinceLastShot += 1 * Time.deltaTime;
+			}
+		} else {
 			movementScript.shooting = false;
 		}
+
+//		if (Input.GetButtonUp ("Fire1")) {
+//			movementScript.shooting = false;
+//		}
 		if (Input.GetButtonDown("Fire3") && bulletCount < clipSize){
 				StartCoroutine ("Reload");
 		}
@@ -54,6 +58,7 @@ public class Shooting : MonoBehaviour {
 			projectileRB.velocity = transform.TransformDirection (new Vector3 (bulletSpeed, 0, 0));
 			transform.root.GetComponent<PlayerMovement> ().recoil = recoil.normalized * recoilForce;
 			bulletCount--;
+			timeSinceLastShot = 0;
 		}
 	}
 
