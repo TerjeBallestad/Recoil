@@ -11,30 +11,18 @@ public class GunRotation : MonoBehaviour {
 
 	
 	void Update () {
-		if (PlayerMovement.facingRight) {
-			PositveRotation ();
-		} else {
-			NegativeRotation ();
-		}
+			ArmRotation ();
 	}
 
-	void PositveRotation(){
+	void ArmRotation(){
 		mousePosition = Input.mousePosition;
 		mousePosition.z = 5.23f; // The distance between the camera and the object
 		objectPosition = Camera.main.WorldToScreenPoint(gameObject.transform.position);
 		mousePosition.x = mousePosition.x - objectPosition.x;
 		mousePosition.y = mousePosition.y - objectPosition.y;
 		angle = Mathf.Atan2 (mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler (new Vector3 (0, 0, angle));
-	}
-
-	void NegativeRotation(){
-		mousePosition = Input.mousePosition;
-		mousePosition.z = 5.23f; // The distance between the camera and the object
-		objectPosition = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-		mousePosition.x = objectPosition.x - mousePosition.x;
-		mousePosition.y = objectPosition.y - mousePosition.y;
-		angle = Mathf.Atan2 (mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
+		if (!PlayerMovement.facingRight)
+			angle += 180;
 		transform.rotation = Quaternion.Euler (new Vector3 (0, 0, angle));
 	}
 }

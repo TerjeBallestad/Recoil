@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour {
 	public Vector2 recoil = Vector2.zero;
 	public bool shooting = false;
 
-	// Use this for initialization
 	void Start () {
 		rigidBody = GetComponent<Rigidbody2D> ();
 		facingRight = true;
@@ -25,12 +24,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	void Update(){
 
-		// Initial Jump
-//		if (Input.GetButtonDown("Jump") && canJump){
-//			Jump (startJumpForce);
-//			canJump = false;
-//		}
 		if (canJump) {
+			
 			if (Input.GetButtonDown ("Jump")){
 				if (jumpForce == startJumpForce) {
 					Jump (startJumpForce);
@@ -99,8 +94,14 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void Move(float horizontal){
-		rigidBody.velocity = new Vector2 (horizontal * movementSpeed + recoil.x, rigidBody.velocity.y + recoil.y);
+		rigidBody.velocity = new Vector2 (horizontal * movementSpeed, rigidBody.velocity.y);
+		Recoil ();
+		Debug.Log (recoil);
 		recoil = Vector2.zero;
+	}
+
+	void Recoil (){
+		rigidBody.AddForce(new Vector2(recoil.x,recoil.y),ForceMode2D.Impulse);
 	}
 
 	void Jump(float jumpForce){
