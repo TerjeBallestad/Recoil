@@ -8,10 +8,9 @@ public class CameraMovement : MonoBehaviour {
 	Transform target;
 	Vector3 moveTo;
 	Vector3 velocity;
-	Vector3 offset;
+	Vector3 offset = Vector3.zero;
 
 	void Start () {
-		offset = new Vector3 (0f, 2f, 0f);
 		target = initialTarget;
 	}
 
